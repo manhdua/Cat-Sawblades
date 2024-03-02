@@ -5,6 +5,7 @@ using namespace std;
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
+#include "Cat.hpp"
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
@@ -25,9 +26,9 @@ int main(int argc, char* args[])
 	SDL_Event event;
 	
 	//tao texture
-	SDL_Texture* grassTexture = window.loadTexture(":DDDDD");
+	SDL_Texture* grassTexture = window.loadTexture("image/grass.png");
 
-	Entity platform(0, 0, grassTexture);
+	Cat main(70, 70, grassTexture, 20);
 
 	while (gameRunning)
 	{
@@ -37,10 +38,11 @@ int main(int argc, char* args[])
 			{
 				gameRunning = false;
 			}
+			main.handleEvent(event);
 		}
-
+		
 		window.clear();
-		window.render(platform); //render texture
+		window.renderCat(main); //render texture
 		window.display();
 	}
 	
