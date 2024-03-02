@@ -6,8 +6,8 @@ using namespace std;
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;
 
 int main(int argc, char* args[])
 {
@@ -25,7 +25,7 @@ int main(int argc, char* args[])
 	SDL_Event event;
 	
 	//tao texture
-	SDL_Texture* grassTexture = window.loadTexture("image/grass.png");
+	SDL_Texture* grassTexture = window.loadTexture(":DDDDD");
 
 	Entity platform(0, 0, grassTexture);
 

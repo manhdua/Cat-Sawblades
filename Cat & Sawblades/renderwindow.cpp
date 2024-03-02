@@ -31,8 +31,8 @@ void RenderWindow::clear()
 void RenderWindow::render(Entity& p_entity)
 {
 	SDL_Rect src;
-	src.x = p_entity.getCurrentFrame().x;
-	src.y = p_entity.getCurrentFrame().y;
+	src.x = p_entity.getCurrentFrame().x;;
+	src.y = p_entity.getCurrentFrame().y;;
 	src.w = p_entity.getCurrentFrame().w;
 	src.h = p_entity.getCurrentFrame().h;
 
