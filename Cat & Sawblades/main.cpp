@@ -18,17 +18,16 @@ int main(int argc, char* args[])
 		cout << "IMG_Init failed\nError: " << SDL_GetError() << '\n';
 
 	// title , resolution
-	RenderWindow window("Bai tap lon", SCREEN_WIDTH, SCREEN_HEIGHT);
+	RenderWindow window("Cat & Sawblades", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	bool gameRunning = true;
 
 	SDL_Event event;
 	
-	SDL_Texture* grass = window.loadTexture("image/grass.png");
+	//tao texture
+	SDL_Texture* grassTexture = window.loadTexture("image/grass.png");
 
-	Entity bob;
-	float bobx, boby;
-
+	Entity platform(0, 0, grassTexture);
 
 	while (gameRunning)
 	{
@@ -40,8 +39,8 @@ int main(int argc, char* args[])
 			}
 		}
 
-		window.clear(); //
-		window.render(grass);
+		window.clear();
+		window.render(platform); //render texture
 		window.display();
 	}
 	
