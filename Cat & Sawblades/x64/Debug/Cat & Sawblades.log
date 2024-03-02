@@ -1,0 +1,8 @@
+﻿  Entity.cpp
+  main.cpp
+C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\main.cpp(29,9): warning C4101: 'bob': unreferenced local variable
+C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\main.cpp(30,14): warning C4101: 'boby': unreferenced local variable
+C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\main.cpp(30,8): warning C4101: 'bobx': unreferenced local variable
+  renderwindow.cpp
+  Generating Code...
+  Cat & Sawblades.vcxproj -> C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\x64\Debug\Cat & Sawblades.exe
