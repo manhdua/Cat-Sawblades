@@ -49,25 +49,25 @@ void RenderWindow::renderEntity(Entity& p_entity)
 	SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
 }
 
-void RenderWindow::renderCat(Cat& p_entity)
+void RenderWindow::renderCat(Cat& p_cat)
 {
 	SDL_Rect src;
-	src.x = p_entity.getCurrentFrame().x;;
-	src.y = p_entity.getCurrentFrame().y;;
-	src.w = p_entity.getCurrentFrame().w;
-	src.h = p_entity.getCurrentFrame().h;
+	src.x = p_cat.getCurrentFrame().x;;
+	src.y = p_cat.getCurrentFrame().y;;
+	src.w = p_cat.getCurrentFrame().w;
+	src.h = p_cat.getCurrentFrame().h;
 
 	SDL_Rect dst;
 	//vi tri
-	dst.x = p_entity.getX();
-	dst.y = p_entity.getY();
+	dst.x = p_cat.getX();
+	dst.y = p_cat.getY();
 	//scale
-	dst.w = p_entity.getCurrentFrame().w * 4;
-	dst.h = p_entity.getCurrentFrame().h * 4;
+	dst.w = p_cat.getCurrentFrame().w * 4;
+	dst.h = p_cat.getCurrentFrame().h * 4;
 
 
 	//(renderer, texture, src, dst)
-	SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
+	SDL_RenderCopy(renderer, p_cat.getTex(), &src, &dst);
 }
 
 void RenderWindow::display()

@@ -7,8 +7,8 @@ using namespace std;
 #include "Entity.hpp"
 #include "Cat.hpp"
 
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 
 int main(int argc, char* args[])
 {
@@ -26,9 +26,9 @@ int main(int argc, char* args[])
 	SDL_Event event;
 	
 	//tao texture
-	SDL_Texture* grassTexture = window.loadTexture("image/grass.png");
+	SDL_Texture* grassTexture = window.loadTexture("image/cat.png");
 
-	Cat main(70, 70, grassTexture, 20);
+	Cat main(50, 50, grassTexture, 0.5);
 
 	while (gameRunning)
 	{
@@ -40,6 +40,7 @@ int main(int argc, char* args[])
 			}
 			main.handleEvent(event);
 		}
+		main.move();
 		
 		window.clear();
 		window.renderCat(main); //render texture

@@ -13,11 +13,13 @@ public:
 	//Entity
 
 	void handleEvent(SDL_Event& e);
+	void move();
 private:
 	float x, y;
 	SDL_Rect currentFrame;
 	SDL_Texture* tex;
 	//Entity
 
-	float velocity;
+	float currentVel;
+	float CatVel;
 };
