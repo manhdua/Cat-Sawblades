@@ -14,6 +14,12 @@ public:
 
 	void handleEvent(SDL_Event& e);
 	void move();
+	void idleRightAnimation(int &frameTime);
+	void moveRightAnimation(int &frameTime);
+	void idleLeftAnimation(int& frameTime);
+	void moveLeftAnimation(int& frameTime);
+	float getCurrentVel();
+	bool getIsRight();
 private:
 	float x, y;
 	SDL_Rect currentFrame;
@@ -22,4 +28,5 @@ private:
 
 	float currentVel;
 	float CatVel;
+	bool isRight;
 };

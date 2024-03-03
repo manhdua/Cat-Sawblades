@@ -28,7 +28,9 @@ int main(int argc, char* args[])
 	//tao texture
 	SDL_Texture* grassTexture = window.loadTexture("image/cat.png");
 
-	Cat main(50, 50, grassTexture, 0.5);
+	Cat main(50, 50, grassTexture, 1);
+
+	int frameTime = 0;
 
 	while (gameRunning)
 	{
@@ -40,7 +42,25 @@ int main(int argc, char* args[])
 			}
 			main.handleEvent(event);
 		}
-		main.move();
+		
+		if (main.getIsRight())
+		{
+			if (main.getCurrentVel() == 0) main.idleRightAnimation(frameTime);
+			else
+			{
+				main.move();
+				main.moveRightAnimation(frameTime);
+			}
+		}
+		else
+		{
+			if (main.getCurrentVel() == 0) main.idleLeftAnimation(frameTime);
+			else
+			{
+				main.move();
+				main.moveLeftAnimation(frameTime);
+			}
+		}
 		
 		window.clear();
 		window.renderCat(main); //render texture

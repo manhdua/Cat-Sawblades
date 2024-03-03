@@ -13,7 +13,7 @@ RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 	if (window == NULL)
 		cout << "Window failed\nError: " << SDL_GetError() << '\n';
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == NULL)
 		cout << "Renderer failed\nError: " << SDL_GetError() << '\n';
 }
