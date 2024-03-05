@@ -5,7 +5,8 @@
 #include <iostream>
 
 Cat::Cat(float p_x, float p_y, SDL_Texture* p_tex, float p_velocity)
-	:x(p_x), y(p_y), tex(p_tex), CatVel(p_velocity), currentVel(0), isRight(1)
+	:x(p_x), y(p_y), tex(p_tex), CatVelX(p_velocity), currentVelX(0), isRight(1), isJumping(0), gravity(1),
+	JumpForce(20), CatVelY(0)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;
@@ -40,13 +41,19 @@ void Cat::handleEvent(SDL_Event& e)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_LEFT:
-			currentVel -= CatVel;
+			currentVelX -= CatVelX;
 			isRight = false;
 			break;
 		case SDLK_RIGHT:
-			currentVel += CatVel;
+			currentVelX += CatVelX;
 			isRight = true;
 			break;
+		case SDLK_UP:
+			if (!isJumping)
+			{
+				CatVelY = -JumpForce;
+				isJumping = true;
+			}
 		}
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
@@ -54,38 +61,12 @@ void Cat::handleEvent(SDL_Event& e)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_LEFT:
-			currentVel += CatVel;
+			currentVelX += CatVelX;
 			break;
 		case SDLK_RIGHT:
-			currentVel -= CatVel;
+			currentVelX -= CatVelX;
 			break;
 		}
-	}
-}
-
-void Cat::idleRightAnimation(int &frameTime)
-{
-	frameTime++;
-	currentFrame.y = 0;
-	if (60 / frameTime == 4) //60 la FPS cua game
-	{
-		frameTime = 0;
-		currentFrame.x += 32; //32 la frameWidth
-		if (currentFrame.x >= 256) //256 la textureWidth
-			currentFrame.x = 0;
-	}
-}
-
-void Cat::idleLeftAnimation(int& frameTime)
-{
-	frameTime++;
-	currentFrame.y = 128;
-	if (60 / frameTime == 4) //60 la FPS cua game
-	{
-		frameTime = 0;
-		currentFrame.x += 32; //32 la frameWidth
-		if (currentFrame.x >= 256) //256 la textureWidth
-			currentFrame.x = 0;
 	}
 }
 
@@ -117,15 +98,27 @@ void Cat::moveLeftAnimation(int& frameTime)
 
 void Cat::move()
 {
-	x += currentVel;
+	x += currentVelX;
 }
 
 float Cat::getCurrentVel()
 {
-	return currentVel;
+	return currentVelX;
 }
 
 bool Cat::getIsRight()
 {
 	return isRight;
+}
+
+void Cat::jump()
+{
+	CatVelY += gravity;
+	y += CatVelY;
+	if (y >= 500)
+	{
+		y = 500;
+		CatVelY = 0;
+		isJumping = 0;
+	}
 }
