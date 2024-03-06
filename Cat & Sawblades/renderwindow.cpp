@@ -41,8 +41,8 @@ void RenderWindow::renderEntity(Entity& p_entity)
 	dst.x = p_entity.getX();
 	dst.y = p_entity.getY();
 	//scale
-	dst.w = p_entity.getCurrentFrame().w * 4;
-	dst.h = p_entity.getCurrentFrame().h * 4;
+	dst.w = p_entity.getCurrentFrame().w;
+	dst.h = p_entity.getCurrentFrame().h;
 
 	
 	//(renderer, texture, src, dst)
@@ -62,8 +62,8 @@ void RenderWindow::renderCat(Cat& p_cat)
 	dst.x = p_cat.getX();
 	dst.y = p_cat.getY();
 	//scale
-	dst.w = p_cat.getCurrentFrame().w * 4;
-	dst.h = p_cat.getCurrentFrame().h * 4;
+	dst.w = p_cat.getCurrentFrame().w * 2;
+	dst.h = p_cat.getCurrentFrame().h * 2;
 
 
 	//(renderer, texture, src, dst)

@@ -33,4 +33,7 @@ private:
 	float gravity;
 	float JumpForce;
 	float CatVelY;
+	float doubleJumpForce;
+	bool doubleJumped;
+	bool jumped;
 };

@@ -26,9 +26,11 @@ int main(int argc, char* args[])
 	SDL_Event event;
 	
 	//tao texture
-	SDL_Texture* grassTexture = window.loadTexture("image/cat.png");
+	SDL_Texture* catTexture = window.loadTexture("image/cat.png");
+	Cat Cat(50, 50, catTexture, 4);
 
-	Cat main(50, 50, grassTexture, 3);
+	SDL_Texture* backgroundTexture = window.loadTexture("image/background.png");
+	Entity background(0, 0, backgroundTexture);
 
 	int frameTime = 0;
 
@@ -40,22 +42,23 @@ int main(int argc, char* args[])
 			{
 				gameRunning = false;
 			}
-			main.handleEvent(event);
+			Cat.handleEvent(event);
 		}
-		main.jump();
-		if (main.getIsRight())
+		Cat.jump();
+		if (Cat.getIsRight())
 		{
-			main.move();
-			if (main.getCurrentVel() != 0) main.moveRightAnimation(frameTime);
+			Cat.move();
+			if (Cat.getCurrentVel() != 0) Cat.moveRightAnimation(frameTime);
 		}
 		else
 		{
-			main.move();
-			if (main.getCurrentVel() != 0) main.moveLeftAnimation(frameTime);
+			Cat.move();
+			if (Cat.getCurrentVel() != 0) Cat.moveLeftAnimation(frameTime);
 		}
 		
 		window.clear();
-		window.renderCat(main); //render texture
+		window.renderEntity(background);
+		window.renderCat(Cat); //render texture
 		window.display();
 	}
 	

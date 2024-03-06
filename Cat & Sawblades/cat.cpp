@@ -5,8 +5,8 @@
 #include <iostream>
 
 Cat::Cat(float p_x, float p_y, SDL_Texture* p_tex, float p_velocity)
-	:x(p_x), y(p_y), tex(p_tex), CatVelX(p_velocity), currentVelX(0), isRight(1), isJumping(0), gravity(1),
-	JumpForce(20), CatVelY(0)
+	:x(p_x), y(p_y), tex(p_tex), CatVelX(p_velocity), currentVelX(0), isRight(1), isJumping(0), gravity(0.5),
+	JumpForce(15), CatVelY(0), doubleJumped(0), jumped(0), doubleJumpForce(12)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;
@@ -49,11 +49,18 @@ void Cat::handleEvent(SDL_Event& e)
 			isRight = true;
 			break;
 		case SDLK_UP:
-			if (!isJumping)
+			if (!isJumping && !jumped)
 			{
 				CatVelY = -JumpForce;
 				isJumping = true;
+				jumped = true;
 			}
+			else if (isJumping && !doubleJumped)
+			{
+				CatVelY = -doubleJumpForce;
+				doubleJumped = true;
+			}
+			break;
 		}
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
@@ -115,10 +122,12 @@ void Cat::jump()
 {
 	CatVelY += gravity;
 	y += CatVelY;
-	if (y >= 500)
+	if (y >= 600)
 	{
-		y = 500;
+		y = 600;
 		CatVelY = 0;
-		isJumping = 0;
+		jumped = false;
+		isJumping = false;
+		doubleJumped = false;
 	}
 }
