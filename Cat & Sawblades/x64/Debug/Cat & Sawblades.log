@@ -1,2 +1,10 @@
 ﻿  cat.cpp
-  Cat & Sawblades.vcxproj -> C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\x64\Debug\Cat & Sawblades.exe
+  Entity.cpp
+  main.cpp
+  renderwindow.cpp
+C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\renderwindow.cpp(41,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\renderwindow.cpp(42,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\renderwindow.cpp(62,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\renderwindow.cpp(63,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  Cat & Sawblades.vcxproj -> C:\Users\vuvan\OneDrive\Desktop\Cat & Sawblades\Cat & Sawblades\Cat & Sawblades\x64\Debug\Cat & Sawblades.exe
