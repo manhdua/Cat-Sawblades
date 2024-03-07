@@ -1,12 +1,13 @@
 #include "Cat.hpp"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 #include <iostream>
 
-Cat::Cat(float p_x, float p_y, SDL_Texture* p_tex, float p_velocity)
+Cat::Cat(float p_x, float p_y, SDL_Texture* p_tex, float p_velocity, Mix_Chunk* p_sound)
 	:x(p_x), y(p_y), tex(p_tex), CatVelX(p_velocity), currentVelX(0), isRight(1), isJumping(0), gravity(0.5),
-	JumpForce(15), CatVelY(0), doubleJumped(0), jumped(0), doubleJumpForce(12)
+	JumpForce(15), CatVelY(0), doubleJumped(0), jumped(0), doubleJumpForce(12), jumpSound(p_sound)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;
@@ -122,12 +123,23 @@ void Cat::jump()
 {
 	CatVelY += gravity;
 	y += CatVelY;
-	if (y >= 600)
+	if (y >= 611)
 	{
-		y = 600;
+		y = 611;
 		CatVelY = 0;
 		jumped = false;
 		isJumping = false;
 		doubleJumped = false;
 	}
+}
+
+bool Cat::getIsJumping()
+{
+	return isJumping;
+}
+
+void Cat::collideWithWall()
+{
+	if (x <= 398) x = 398;
+	if (x >= 820) x = 820;
 }

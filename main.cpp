@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
+#include <SDL_mixer.h>
 using namespace std;
 
 #include "RenderWindow.hpp"
@@ -12,11 +13,14 @@ const int SCREEN_HEIGHT = 720;
 
 int main(int argc, char* args[])
 {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		cout << "SDL_Init failed\nError: " << SDL_GetError() << '\n';
 
 	if (!IMG_Init(IMG_INIT_PNG))
-		cout << "IMG_Init failed\nError: " << SDL_GetError() << '\n';
+		cout << "IMG_Init failed\nError: " << IMG_GetError() << '\n';
+	
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		cout << "SDL_mixer failed\nError: " << Mix_GetError() << '\n';
 
 	// title , resolution
 	RenderWindow window("Cat & Sawblades", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -25,11 +29,14 @@ int main(int argc, char* args[])
 
 	SDL_Event event;
 	
+	Mix_Chunk* jump = NULL;
+	jump = Mix_LoadWAV("audio/jump.wav");
+
 	//tao texture
 	SDL_Texture* catTexture = window.loadTexture("image/cat.png");
-	Cat Cat(50, 50, catTexture, 4);
+	Cat Cat(500, 300, catTexture, 4, jump);
 
-	SDL_Texture* backgroundTexture = window.loadTexture("image/background.png");
+	SDL_Texture* backgroundTexture = window.loadTexture("image/bg.png");
 	Entity background(0, 0, backgroundTexture);
 
 	int frameTime = 0;
@@ -44,6 +51,7 @@ int main(int argc, char* args[])
 			}
 			Cat.handleEvent(event);
 		}
+		Cat.collideWithWall();
 		Cat.jump();
 		if (Cat.getIsRight())
 		{
@@ -62,8 +70,12 @@ int main(int argc, char* args[])
 		window.display();
 	}
 	
+	Mix_FreeChunk(jump);
+	jump = NULL;
 	window.cleanUp();
 	SDL_Quit();
+	IMG_Quit();
+	Mix_Quit();
 
 	return 0;
 }

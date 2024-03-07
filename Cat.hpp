@@ -1,11 +1,12 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 class Cat
 {
 public:
-	Cat(float p_x, float p_y, SDL_Texture* p_tex, float p_velocity);
+	Cat(float p_x, float p_y, SDL_Texture* p_tex, float p_velocity, Mix_Chunk* p_sound);
 	float getX();
 	float getY();
 	SDL_Texture* getTex();
@@ -19,6 +20,8 @@ public:
 	float getCurrentVel();
 	bool getIsRight();
 	void jump();
+	bool getIsJumping();
+	void collideWithWall();
 private:
 	float x, y;
 	SDL_Rect currentFrame;
@@ -36,4 +39,5 @@ private:
 	float doubleJumpForce;
 	bool doubleJumped;
 	bool jumped;
+	Mix_Chunk* jumpSound;
 };
