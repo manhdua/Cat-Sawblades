@@ -84,3 +84,24 @@ SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)
 
 	return texture;
 }
+
+void RenderWindow::renderSawblade(Sawblade& p_cat)
+{
+	SDL_Rect src;
+	src.x = p_cat.getCurrentFrame().x;;
+	src.y = p_cat.getCurrentFrame().y;;
+	src.w = p_cat.getCurrentFrame().w;
+	src.h = p_cat.getCurrentFrame().h;
+
+	SDL_Rect dst;
+	//vi tri
+	dst.x = p_cat.getX();
+	dst.y = p_cat.getY();
+	//scale
+	dst.w = p_cat.getCurrentFrame().w * 2;
+	dst.h = p_cat.getCurrentFrame().h * 2;
+
+
+	//(renderer, texture, src, dst)
+	SDL_RenderCopy(renderer, p_cat.getTex(), &src, &dst);
+}

@@ -2,17 +2,23 @@
 #include <SDL_image.h>
 #include <iostream>
 #include <SDL_mixer.h>
+#include <vector>
+#include <cstdlib>
+#include <time.h>
 using namespace std;
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 #include "Cat.hpp"
+#include "Sawblade.hpp"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
 int main(int argc, char* args[])
 {
+	srand(time(0));
+	
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		cout << "SDL_Init failed\nError: " << SDL_GetError() << '\n';
 
@@ -36,8 +42,13 @@ int main(int argc, char* args[])
 	SDL_Texture* catTexture = window.loadTexture("image/cat.png");
 	Cat Cat(500, 300, catTexture, 4, jump);
 
+	SDL_Texture* redSawbladeTexture = window.loadTexture("image/redsawblade.png");
+	SDL_Texture* greenSawbladeTexture = window.loadTexture("image/greensawblade.png");
+
 	SDL_Texture* backgroundTexture = window.loadTexture("image/bg.png");
 	Entity background(0, 0, backgroundTexture);
+
+	vector<Sawblade> sawblades;
 
 	int frameTime = 0;
 
@@ -49,8 +60,17 @@ int main(int argc, char* args[])
 			{
 				gameRunning = false;
 			}
+			if (event.type == SDL_MOUSEBUTTONDOWN)
+			{
+				if (event.button.button == SDL_BUTTON_LEFT)
+				{
+					sawblades.push_back(Sawblade(400, 30, redSawbladeTexture, 5, rand() % 100 + 1, rand() % 100 + 1));
+				}
+			}
 			Cat.handleEvent(event);
 		}
+
+
 		Cat.collideWithWall();
 		Cat.jump();
 		if (Cat.getIsRight())
@@ -67,6 +87,14 @@ int main(int argc, char* args[])
 		window.clear();
 		window.renderEntity(background);
 		window.renderCat(Cat); //render texture
+		for (auto& sawblade : sawblades)
+		{
+			if (sawblade.isActive())
+			{
+				sawblade.move();
+				window.renderSawblade(sawblade);
+			}
+		}
 		window.display();
 	}
 	
