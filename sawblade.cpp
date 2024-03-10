@@ -40,6 +40,9 @@ void Sawblade::move()
 {
 	x += velX;
 	y += velY;
+	if (x <= 398) velX = -velX;
+	if (x >= 820) velX = -velX;
+	if (y >= 611) velY = -velY;
 }
 
 bool Sawblade::isActive()

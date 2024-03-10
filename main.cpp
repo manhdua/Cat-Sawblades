@@ -64,7 +64,7 @@ int main(int argc, char* args[])
 			{
 				if (event.button.button == SDL_BUTTON_LEFT)
 				{
-					sawblades.push_back(Sawblade(400, 30, redSawbladeTexture, 5, rand() % 100 + 1, rand() % 100 + 1));
+					sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, 5, rand()%201 - 100, rand()%100 + 1));
 				}
 			}
 			Cat.handleEvent(event);
