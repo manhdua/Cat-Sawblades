@@ -2,9 +2,10 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <cmath>
+#include "Cat.hpp"
 
-Sawblade::Sawblade(float p_x, float p_y, SDL_Texture* p_tex, float p_bulletSpeed, float p_dx, float p_dy)
-	:x(p_x), y(p_y), tex(p_tex), active(1)
+Sawblade::Sawblade(float p_x, float p_y, SDL_Texture* p_red, SDL_Texture* p_green, float p_bulletSpeed, float p_dx, float p_dy)
+	:x(p_x), y(p_y), tex(p_red), greenTex(p_green), active(1)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;
@@ -16,14 +17,14 @@ Sawblade::Sawblade(float p_x, float p_y, SDL_Texture* p_tex, float p_bulletSpeed
 	velY = p_dy / magnitude * p_bulletSpeed;
 }
 
-float Sawblade::getX()
+int Sawblade::getX()
 {
-	return x;
+	return (int)x;
 }
 
-float Sawblade::getY()
+int Sawblade::getY()
 {
-	return y;
+	return (int)y;
 }
 
 SDL_Texture* Sawblade::getTex()
@@ -43,6 +44,8 @@ void Sawblade::move()
 	if (x <= 398) velX = -velX;
 	if (x >= 820) velX = -velX;
 	if (y >= 611) velY = -velY;
+
+	
 }
 
 bool Sawblade::isActive()
@@ -53,4 +56,9 @@ bool Sawblade::isActive()
 void Sawblade::deactivate()
 {
 	active = false;
+}
+
+void Sawblade::changeToGreen()
+{
+	tex = greenTex;
 }

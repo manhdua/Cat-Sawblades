@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdlib>
 #include <time.h>
+#include <cmath>
 using namespace std;
 
 #include "RenderWindow.hpp"
@@ -51,6 +52,7 @@ int main(int argc, char* args[])
 	vector<Sawblade> sawblades;
 
 	int frameTime = 0;
+	int delay = 0;
 
 	while (gameRunning)
 	{
@@ -60,17 +62,14 @@ int main(int argc, char* args[])
 			{
 				gameRunning = false;
 			}
-			if (event.type == SDL_MOUSEBUTTONDOWN)
-			{
-				if (event.button.button == SDL_BUTTON_LEFT)
-				{
-					sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, 5, rand()%201 - 100, rand()%100 + 1));
-				}
-			}
 			Cat.handleEvent(event);
 		}
-
-
+		delay++;
+		if (delay == 50)
+		{
+			delay = 0;
+			sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, greenSawbladeTexture, 5, rand() % 201 - 100, rand() % 100 + 1));
+		}
 		Cat.collideWithWall();
 		Cat.jump();
 		if (Cat.getIsRight())
@@ -91,6 +90,7 @@ int main(int argc, char* args[])
 		{
 			if (sawblade.isActive())
 			{
+				if (Cat.getY() < sawblade.getY() && abs(Cat.getX() - sawblade.getX()) < 5) sawblade.changeToGreen();
 				sawblade.move();
 				window.renderSawblade(sawblade);
 			}
