@@ -1,6 +1,7 @@
 ﻿#include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
+#include <SDL_ttf.h>
 using namespace std;
 
 #include "RenderWindow.hpp"
@@ -104,4 +105,21 @@ void RenderWindow::renderSawblade(Sawblade& p_cat)
 
 	//(renderer, texture, src, dst)
 	SDL_RenderCopy(renderer, p_cat.getTex(), &src, &dst);
+}
+
+void RenderWindow::renderText(TTF_Font* p_font, const std::string& text, float x, float y)
+{
+	SDL_Color color = {0, 0, 0}; //pure black
+	SDL_Surface* surface = TTF_RenderText_Solid(p_font, text.c_str(), color);
+	if (surface == NULL) {
+		cout << "Surface failed\nError: " << TTF_GetError() << '\n';
+	}
+
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	if (texture == NULL) {
+		std::cerr << "Texture failed\nError: " << SDL_GetError() << '\n';
+		return;
+	}
+	SDL_Rect textRect = {x, y, surface->w, surface->h};
+	SDL_RenderCopy(renderer, texture, NULL, &textRect);
 }

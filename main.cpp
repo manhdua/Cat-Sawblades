@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <time.h>
 #include <cmath>
+#include <string>
+#include <SDL_ttf.h>
 using namespace std;
 
 #include "RenderWindow.hpp"
@@ -33,8 +35,11 @@ int main(int argc, char* args[])
 	if (!IMG_Init(IMG_INIT_PNG))
 		cout << "IMG_Init failed\nError: " << IMG_GetError() << '\n';
 	
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-		cout << "SDL_mixer failed\nError: " << Mix_GetError() << '\n';
+	TTF_Init();
+	TTF_Font* font = NULL;
+	font = TTF_OpenFont("Minecraft.ttf", 32);
+	if (font == NULL)
+		cout << "Font failed\nError: " << TTF_GetError() << '\n';
 
 	// title , resolution
 	RenderWindow window("Cat & Sawblades", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -60,6 +65,7 @@ int main(int argc, char* args[])
 
 	int frameTime = 0;
 	int delay = 0;
+	int playerScore = 0;
 
 	while (gameRunning)
 	{
@@ -93,6 +99,8 @@ int main(int argc, char* args[])
 		window.clear();
 		window.renderEntity(background);
 		window.renderCat(Cat); //render texture
+		window.renderText(font, to_string(playerScore), 640, 150);
+		
 		for (auto& sawblade : sawblades)
 		{
 			if (sawblade.isActive())
@@ -102,7 +110,11 @@ int main(int argc, char* args[])
 					sawblade.changeToGreen();
 				}
 				
-				if (sawblade.getChangedToGreen() && Cat.getY() == 611) sawblade.deactivate();
+				if (sawblade.getChangedToGreen() && Cat.getY() == 611)
+				{
+					sawblade.deactivate();
+					playerScore++;
+				}
 
 				sawblade.move();
 				window.renderSawblade(sawblade);

@@ -1,6 +1,6 @@
 ﻿  main.cpp
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(28,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(78,135): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(78,115): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(78,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(30,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(84,135): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(84,115): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(84,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Cat & Sawblades.vcxproj -> C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\x64\Debug\Cat & Sawblades.exe
