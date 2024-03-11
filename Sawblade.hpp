@@ -15,6 +15,7 @@ public:
 	bool isActive();
 	void deactivate();
 	void changeToGreen();
+	bool getChangedToGreen();
 private:
 	float x, y;
 	SDL_Rect currentFrame;
@@ -23,4 +24,5 @@ private:
 	float velX, velY;
 	bool active;
 	SDL_Texture* greenTex;
+	bool changedToGreen;
 };

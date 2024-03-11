@@ -16,6 +16,13 @@ using namespace std;
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
+bool checkCollision(float Ax, float Ay, float Bx, float By)
+{
+	if (Ax + 64 < Bx || Bx + 64 < Ax || Ay + 64 < By || By + 64 < Ay)
+		return false;
+	return true;
+}
+
 int main(int argc, char* args[])
 {
 	srand(time(0));
@@ -90,7 +97,13 @@ int main(int argc, char* args[])
 		{
 			if (sawblade.isActive())
 			{
-				if (Cat.getY() < sawblade.getY() && abs(Cat.getX() - sawblade.getX()) < 5) sawblade.changeToGreen();
+				if (Cat.getY() < sawblade.getY() && abs(Cat.getX() - sawblade.getX()) < 5)
+				{
+					sawblade.changeToGreen();
+				}
+				
+				if (sawblade.getChangedToGreen() && Cat.getY() == 611) sawblade.deactivate();
+
 				sawblade.move();
 				window.renderSawblade(sawblade);
 			}
