@@ -7,7 +7,7 @@
 
 Cat::Cat(float p_x, float p_y, SDL_Texture* p_tex, float p_velocity, Mix_Chunk* p_sound)
 	:x(p_x), y(p_y), tex(p_tex), CatVelX(p_velocity), currentVelX(0), isRight(1), isJumping(0), gravity(0.5),
-	JumpForce(15), CatVelY(0), doubleJumped(0), jumped(0), doubleJumpForce(12), jumpSound(p_sound)
+	JumpForce(13), CatVelY(0), doubleJumped(0), jumped(0), doubleJumpForce(12), jumpSound(p_sound)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;

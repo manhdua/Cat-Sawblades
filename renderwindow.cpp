@@ -107,10 +107,9 @@ void RenderWindow::renderSawblade(Sawblade& p_cat)
 	SDL_RenderCopy(renderer, p_cat.getTex(), &src, &dst);
 }
 
-void RenderWindow::renderText(TTF_Font* p_font, const std::string& text, float x, float y)
+void RenderWindow::renderText(TTF_Font* p_font, SDL_Color p_color ,const std::string& text, float x, float y)
 {
-	SDL_Color color = {0, 0, 0}; //pure black
-	SDL_Surface* surface = TTF_RenderText_Solid(p_font, text.c_str(), color);
+	SDL_Surface* surface = TTF_RenderText_Solid(p_font, text.c_str(), p_color);
 	if (surface == NULL) {
 		cout << "Surface failed\nError: " << TTF_GetError() << '\n';
 	}

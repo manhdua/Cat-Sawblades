@@ -17,7 +17,7 @@ public:
 	void renderCat(Cat& p_entity);
 	void renderSawblade(Sawblade& p_entity);
 	void display(); //Update the screen with any rendering performed since the previous call.
-	void renderText(TTF_Font* p_font, const std::string& text, float x, float y);
+	void renderText(TTF_Font* p_font, SDL_Color p_color ,const std::string& text, float x, float y);
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
