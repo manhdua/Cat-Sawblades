@@ -18,6 +18,8 @@ using namespace std;
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
+const int FPS = 60;
+const int TICKS_PER_FRAME = 1000 / FPS;
 
 bool checkCollision(float Ax, float Ay, float Bx, float By)
 {
@@ -65,16 +67,21 @@ int main(int argc, char* args[])
 	vector<Sawblade> sawblades;
 
 	LTimer fpsTimer;
+	LTimer capTimer;
 
 	int frameTime = 0;
 	int delay = 0;
 	int playerScore = 0;
 	int countedFrame = 0;
+	int SpawnSpeed = 100;
 
 	fpsTimer.start();
 
 	while (gameRunning)
 	{
+		capTimer.start();
+
+		
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT)
@@ -87,9 +94,9 @@ int main(int argc, char* args[])
 		int avgFPS = countedFrame / (fpsTimer.getTicks() / 1000.f);
 		if (avgFPS > 2000000)
 			avgFPS = 0;
-
+		
 		delay++;
-		if (delay == 100)
+		if (delay == SpawnSpeed)
 		{
 			delay = 0;
 			sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, greenSawbladeTexture, 5, rand() % 201 - 100, rand() % 100 + 1));
@@ -108,6 +115,10 @@ int main(int argc, char* args[])
 		}
 		
 		countedFrame++;
+		int frameTicks = capTimer.getTicks();
+		if (frameTicks < TICKS_PER_FRAME)
+			SDL_Delay(TICKS_PER_FRAME - frameTicks);
+		
 		window.clear();
 		window.renderEntity(background);
 		window.renderCat(Cat); //render texture
