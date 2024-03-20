@@ -1,9 +1,9 @@
 ﻿  main.cpp
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(33,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(94,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(102,135): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(102,115): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(102,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(145,78): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(145,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(43,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(104,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(112,135): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(112,115): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(112,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(155,78): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(155,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Cat & Sawblades.vcxproj -> C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\x64\Debug\Cat & Sawblades.exe

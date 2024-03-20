@@ -28,6 +28,16 @@ bool checkCollision(float Ax, float Ay, float Bx, float By)
 	return true;
 }
 
+void restartGame(Cat &p_cat, vector<Sawblade> &p_sawblade, int &p_score)
+{
+	p_cat.restartPos();
+	for (int i = 0; i < p_sawblade.size(); i++)
+	{
+		p_sawblade[i].deactivate();
+	}
+	p_score = 0;
+}
+
 int main(int argc, char* args[])
 {
 	srand(time(0));
@@ -56,7 +66,7 @@ int main(int argc, char* args[])
 
 	//tao texture
 	SDL_Texture* catTexture = window.loadTexture("image/cat.png");
-	Cat Cat(500, 300, catTexture, 5, jump);
+	Cat Cat(630, 611, catTexture, 5, jump);
 
 	SDL_Texture* redSawbladeTexture = window.loadTexture("image/redsawblade.png");
 	SDL_Texture* greenSawbladeTexture = window.loadTexture("image/greensawblade.png");
@@ -113,7 +123,7 @@ int main(int argc, char* args[])
 			Cat.move();
 			if (Cat.getCurrentVel() != 0) Cat.moveLeftAnimation(frameTime);
 		}
-		
+
 		countedFrame++;
 		int frameTicks = capTimer.getTicks();
 		if (frameTicks < TICKS_PER_FRAME)
@@ -143,7 +153,7 @@ int main(int argc, char* args[])
 				if (sawblade.getY() < 30) sawblade.deactivate();
 
 				if (checkCollision(Cat.getX(), Cat.getY(), sawblade.getX(), sawblade.getY()))
-					gameRunning = false;
+					restartGame(Cat, sawblades, playerScore);
 				sawblade.move();
 				window.renderSawblade(sawblade);
 			}

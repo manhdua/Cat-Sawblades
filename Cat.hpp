@@ -22,6 +22,7 @@ public:
 	void jump();
 	bool getIsJumping();
 	void collideWithWall();
+	void restartPos();
 private:
 	float x, y;
 	SDL_Rect currentFrame;

@@ -143,3 +143,9 @@ void Cat::collideWithWall()
 	if (x <= 398) x = 398;
 	if (x >= 820) x = 820;
 }
+
+void Cat::restartPos()
+{
+	x = 630;
+	y = 611;
+}
