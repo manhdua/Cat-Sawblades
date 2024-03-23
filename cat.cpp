@@ -52,12 +52,14 @@ void Cat::handleEvent(SDL_Event& e)
 		case SDLK_UP:
 			if (!isJumping && !jumped)
 			{
+				Mix_PlayChannel(-1, jumpSound, 0);
 				CatVelY = -JumpForce;
 				isJumping = true;
 				jumped = true;
 			}
 			else if (isJumping && !doubleJumped)
 			{
+				Mix_PlayChannel(-1, jumpSound, 0);
 				CatVelY = -doubleJumpForce;
 				doubleJumped = true;
 			}

@@ -6,6 +6,7 @@ using namespace std;
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
+#include "Deathmenu.hpp"
 
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 	:window(NULL), renderer(NULL)
@@ -84,6 +85,26 @@ SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)
 		cout << "Texture failed\nError: " << SDL_GetError() << '\n';
 
 	return texture;
+}
+
+void RenderWindow::renderDeathmenu(Deathmenu& p_cat)
+{
+	SDL_Rect src;
+	src.x = p_cat.getCurrentFrame().x;;
+	src.y = p_cat.getCurrentFrame().y;;
+	src.w = p_cat.getCurrentFrame().w;
+	src.h = p_cat.getCurrentFrame().h;
+
+	SDL_Rect dst;
+	//vi tri
+	dst.x = p_cat.getX();
+	dst.y = p_cat.getY();
+	//scale
+	dst.w = p_cat.getCurrentFrame().w;
+	dst.h = p_cat.getCurrentFrame().h;
+
+
+	SDL_RenderCopy(renderer, p_cat.getTex(), &src, &dst);
 }
 
 void RenderWindow::renderSawblade(Sawblade& p_cat)
