@@ -1,4 +1,4 @@
-#include <SDL.h>
+﻿#include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
 #include <SDL_mixer.h>
@@ -22,9 +22,11 @@ const int SCREEN_HEIGHT = 720;
 const int FPS = 60;
 const int TICKS_PER_FRAME = 1000 / FPS;
 
+bool paused = false;
+bool showDeathMenu = false;
+
 bool checkCollision(float Ax, float Ay, float Bx, float By);
 void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score);
-void TryAgainMenu(Deathmenu& p_deathmenus, RenderWindow& p_window);
 
 int main(int argc, char* args[])
 {
@@ -39,8 +41,10 @@ int main(int argc, char* args[])
 	TTF_Init();
 	TTF_Font* font = NULL;
 	TTF_Font* smallerFont = NULL;
+	TTF_Font* scoreFont = NULL;
 	font = TTF_OpenFont("dogicapixel.ttf", 32);
 	smallerFont = TTF_OpenFont("dogicapixel.ttf", 16);
+	scoreFont = TTF_OpenFont("Have Idea.ttf", 32);
 
 	// title , resolution
 	RenderWindow window("Cat & Sawblades", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -73,7 +77,7 @@ int main(int argc, char* args[])
 	Entity background(0, 0, backgroundTexture);
 
 	SDL_Texture* deathmenuTexture = window.loadTexture("image/deathmenu.png");
-	Deathmenu deathmenu(500, 500, deathmenuTexture);
+	Deathmenu deathmenu(290, 200, deathmenuTexture);
 
 	vector<Sawblade> sawblades;
 
@@ -83,9 +87,9 @@ int main(int argc, char* args[])
 	int frameTime = 0;
 	int delay = 0;
 	int playerScore = 0;
+	int maxScore = 0;
 	int countedFrame = 0;
 	int SpawnSpeed = 100;
-	bool paused = false;
 
 	fpsTimer.start();
 
@@ -131,37 +135,56 @@ int main(int argc, char* args[])
 		if (frameTicks < TICKS_PER_FRAME)
 			SDL_Delay(TICKS_PER_FRAME - frameTicks);
 		
-		window.clear();
-		window.renderEntity(background);
-		window.renderCat(Cat); //render texture
-		window.renderText(font, {0, 0, 0}, to_string(playerScore), 640, 150);
-		window.renderText(smallerFont, {255, 255, 255}, "FPS: " + to_string(avgFPS), 10, 10);
-		
-		for (auto& sawblade : sawblades)
+		if (playerScore > maxScore) maxScore = playerScore;
+
+		if (!paused)
 		{
-			if (sawblade.isActive())
+			window.clear();
+			window.renderEntity(background);
+			window.renderCat(Cat); //render texture
+			window.renderText(font, { 0, 0, 0 }, to_string(playerScore), 640, 150);
+			window.renderText(smallerFont, { 255, 255, 255 }, "FPS: " + to_string(avgFPS), 10, 10);
+
+			for (auto& sawblade : sawblades)
 			{
-				if (Cat.getY() < sawblade.getY() && abs(Cat.getX() - sawblade.getX()) < 5)
+				if (sawblade.isActive())
 				{
-					sawblade.changeToGreen();
-				}
-				
-				if (sawblade.getChangedToGreen() && Cat.getY() == 611)
-				{
-					sawblade.deactivate();
-					playerScore++;
-					Mix_PlayChannel(-1, click, 0);
-				}
+					if (Cat.getY() < sawblade.getY() && abs(Cat.getX() - sawblade.getX()) < 5)
+					{
+						sawblade.changeToGreen();
+					}
 
-				if (sawblade.getY() < 30) sawblade.deactivate();
+					if (sawblade.getChangedToGreen() && Cat.getY() == 611)
+					{
+						sawblade.deactivate();
+						playerScore++;
+						Mix_PlayChannel(-1, click, 0);
+					}
 
-				if (checkCollision(Cat.getX(), Cat.getY(), sawblade.getX(), sawblade.getY()))
-					TryAgainMenu(deathmenu, window);
-				sawblade.move();
-				window.renderSawblade(sawblade);
+					if (sawblade.getY() < 30) sawblade.deactivate();
+
+					if (checkCollision(Cat.getX(), Cat.getY(), sawblade.getX(), sawblade.getY()))
+					{
+						sawblade.deactivate();
+						showDeathMenu = true;
+						paused = true;
+					}
+					sawblade.move();
+					window.renderSawblade(sawblade);
+				}
 			}
+			window.display();
+
+			if (showDeathMenu)
+			{
+				window.renderDeathmenu(deathmenu);
+				showDeathMenu = false;
+
+				window.renderText(scoreFont, {0, 0, 0}, to_string(playerScore), 470, 280);
+				window.renderText(scoreFont, { 0, 0, 0 }, to_string(maxScore), 460, 330);
+			}
+			window.display();
 		}
-		window.display();
 	}
 	
 	Mix_FreeChunk(jump);
@@ -190,9 +213,4 @@ void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score)
 		p_sawblade[i].deactivate();
 	}
 	p_score = 0;
-}
-
-void TryAgainMenu(Deathmenu& p_deathmenu, RenderWindow& p_window)
-{
-	p_window.renderDeathmenu(p_deathmenu);
 }
