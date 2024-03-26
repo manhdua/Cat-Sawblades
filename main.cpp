@@ -77,7 +77,9 @@ int main(int argc, char* args[])
 	Entity background(0, 0, backgroundTexture);
 
 	SDL_Texture* deathmenuTexture = window.loadTexture("image/deathmenu.png");
-	Deathmenu deathmenu(290, 200, deathmenuTexture);
+	SDL_Texture* tryAgainTexture = window.loadTexture("image/tryAgain.png");
+	SDL_Texture* quitTexture = window.loadTexture("image/quit.png");
+	Deathmenu deathmenu(290, 200, deathmenuTexture, tryAgainTexture, quitTexture);
 
 	vector<Sawblade> sawblades;
 
@@ -97,6 +99,17 @@ int main(int argc, char* args[])
 	{
 		capTimer.start();
 
+		int mouseX, mouseY;
+		SDL_GetMouseState(&mouseX, &mouseY);
+		if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
+		{
+			deathmenu.changeToTryAgain();
+		}
+		else if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
+		{
+			deathmenu.changeToQuit();
+		}
+		else deathmenu.changeToNormal();
 		
 		while (SDL_PollEvent(&event))
 		{
@@ -105,6 +118,21 @@ int main(int argc, char* args[])
 				gameRunning = false;
 			}
 			Cat.handleEvent(event);
+
+			if (event.type == SDL_MOUSEBUTTONDOWN && showDeathMenu)
+			{	
+				if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
+				{
+					paused = false;
+					showDeathMenu = false;
+					restartGame(Cat, sawblades, playerScore);
+				}
+
+				if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
+				{
+					gameRunning = false;
+				}
+			}
 		}
 		
 		int avgFPS = countedFrame / (fpsTimer.getTicks() / 1000.f);
@@ -173,18 +201,14 @@ int main(int argc, char* args[])
 					window.renderSawblade(sawblade);
 				}
 			}
-			window.display();
-
-			if (showDeathMenu)
-			{
-				window.renderDeathmenu(deathmenu);
-				showDeathMenu = false;
-
-				window.renderText(scoreFont, {0, 0, 0}, to_string(playerScore), 470, 280);
-				window.renderText(scoreFont, { 0, 0, 0 }, to_string(maxScore), 460, 330);
-			}
-			window.display();
 		}
+		if (showDeathMenu)
+		{
+			window.renderDeathmenu(deathmenu);
+			window.renderText(scoreFont, { 0, 0, 0 }, to_string(playerScore), 470, 280);
+			window.renderText(scoreFont, { 0, 0, 0 }, to_string(maxScore), 460, 330);
+		}
+		window.display();
 	}
 	
 	Mix_FreeChunk(jump);

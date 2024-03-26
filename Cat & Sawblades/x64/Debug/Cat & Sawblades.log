@@ -1,9 +1,9 @@
 ﻿  main.cpp
 C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(33,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(110,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(118,135): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(118,115): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(118,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(166,79): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(166,62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(138,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(146,135): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(146,115): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(146,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(194,79): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\main.cpp(194,62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Cat & Sawblades.vcxproj -> C:\Users\vuvan\OneDrive\Desktop\Cat-SawbladeS\x64\Debug\Cat & Sawblades.exe
