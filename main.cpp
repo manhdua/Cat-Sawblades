@@ -16,17 +16,20 @@ using namespace std;
 #include "Sawblade.hpp"
 #include "LTimer.hpp"
 #include "Deathmenu.hpp"
+#include "mainMenu.hpp"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 const int FPS = 60;
 const int TICKS_PER_FRAME = 1000 / FPS;
 
-bool paused = false;
+bool paused = true;
 bool showDeathMenu = false;
+bool showMainMenu = true;
 
 bool checkCollision(float Ax, float Ay, float Bx, float By);
 void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score);
+string randomMusic();
 
 int main(int argc, char* args[])
 {
@@ -76,10 +79,17 @@ int main(int argc, char* args[])
 	SDL_Texture* backgroundTexture = window.loadTexture("image/bg.png");
 	Entity background(0, 0, backgroundTexture);
 
+	//deathMenu
 	SDL_Texture* deathmenuTexture = window.loadTexture("image/deathmenu.png");
 	SDL_Texture* tryAgainTexture = window.loadTexture("image/tryAgain.png");
 	SDL_Texture* quitTexture = window.loadTexture("image/quit.png");
 	Deathmenu deathmenu(290, 200, deathmenuTexture, tryAgainTexture, quitTexture);
+
+	//mainMenu
+	SDL_Texture* mainmenuTexture = window.loadTexture("image/mainmenu.png");
+	SDL_Texture* playTexture = window.loadTexture("image/play.png");
+	SDL_Texture* optionTexture = window.loadTexture("image/option.png");
+	mainMenu mainmenu(0, 0, mainmenuTexture, playTexture, optionTexture);
 
 	vector<Sawblade> sawblades;
 
@@ -101,6 +111,7 @@ int main(int argc, char* args[])
 
 		int mouseX, mouseY;
 		SDL_GetMouseState(&mouseX, &mouseY);
+		
 		if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
 		{
 			deathmenu.changeToTryAgain();
@@ -110,6 +121,16 @@ int main(int argc, char* args[])
 			deathmenu.changeToQuit();
 		}
 		else deathmenu.changeToNormal();
+
+		if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
+		{
+			mainmenu.changeToPlay();
+		}
+		else if (mouseX >= 432 && mouseX <= 848 && mouseY >= 366 && mouseY <= 436)
+		{
+			mainmenu.changeToOption();
+		}
+		else mainmenu.changeToNormal();
 		
 		while (SDL_PollEvent(&event))
 		{
@@ -119,18 +140,30 @@ int main(int argc, char* args[])
 			}
 			Cat.handleEvent(event);
 
-			if (event.type == SDL_MOUSEBUTTONDOWN && showDeathMenu)
-			{	
-				if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
+			if (event.type == SDL_MOUSEBUTTONDOWN)
+			{
+				if (showMainMenu)
 				{
-					paused = false;
-					showDeathMenu = false;
-					restartGame(Cat, sawblades, playerScore);
+					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
+					{
+						showMainMenu = false;
+						paused = false;
+					}
 				}
-
-				if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
+				
+				if (showDeathMenu)
 				{
-					gameRunning = false;
+					if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
+					{
+						paused = false;
+						showDeathMenu = false;
+						restartGame(Cat, sawblades, playerScore);
+					}
+
+					if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
+					{
+						gameRunning = false;
+					}
 				}
 			}
 		}
@@ -139,12 +172,6 @@ int main(int argc, char* args[])
 		if (avgFPS > 2000000)
 			avgFPS = 0;
 		
-		delay++;
-		if (delay == SpawnSpeed)
-		{
-			delay = 0;
-			sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, greenSawbladeTexture, 5, rand() % 201 - 100, rand() % 100 + 1));
-		}
 		Cat.collideWithWall();
 		Cat.jump();
 		if (Cat.getIsRight())
@@ -167,10 +194,18 @@ int main(int argc, char* args[])
 
 		if (!paused)
 		{
+			//spawn sawblade
+			delay++;
+			if (delay == SpawnSpeed)
+			{
+				delay = 0;
+				sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, greenSawbladeTexture, 5, rand() % 201 - 100, rand() % 100 + 1));
+			}
+			
 			window.clear();
 			window.renderEntity(background);
 			window.renderCat(Cat); //render texture
-			window.renderText(font, { 0, 0, 0 }, to_string(playerScore), 640, 150);
+			window.renderText(smallerFont, { 0, 0, 0 }, "Score: " + to_string(playerScore), 420, 60);
 			window.renderText(smallerFont, { 255, 255, 255 }, "FPS: " + to_string(avgFPS), 10, 10);
 
 			for (auto& sawblade : sawblades)
@@ -208,6 +243,11 @@ int main(int argc, char* args[])
 			window.renderText(scoreFont, { 0, 0, 0 }, to_string(playerScore), 470, 280);
 			window.renderText(scoreFont, { 0, 0, 0 }, to_string(maxScore), 460, 330);
 		}
+		if (showMainMenu)
+		{
+			window.renderMainMenu(mainmenu);
+		}
+		
 		window.display();
 	}
 	

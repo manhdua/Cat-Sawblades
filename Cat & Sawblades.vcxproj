@@ -24,6 +24,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="LTimer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainMenu.cpp" />
     <ClCompile Include="renderwindow.cpp" />
     <ClCompile Include="sawblade.cpp" />
   </ItemGroup>
@@ -32,6 +33,7 @@
     <ClInclude Include="Deathmenu.hpp" />
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="LTimer.hpp" />
+    <ClInclude Include="mainMenu.hpp" />
     <ClInclude Include="RenderWindow.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

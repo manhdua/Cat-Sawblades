@@ -2,6 +2,7 @@
 #include "Entity.hpp"
 #include "Cat.hpp"
 #include "Sawblade.hpp"
+#include "mainMenu.hpp"
 #include "Deathmenu.hpp"
 #include <SDL.h>
 #include <SDL_image.h>
@@ -20,6 +21,7 @@ public:
 	void renderDeathmenu(Deathmenu& p_entity);
 	void display(); //Update the screen with any rendering performed since the previous call.
 	void renderText(TTF_Font* p_font, SDL_Color p_color ,const std::string& text, float x, float y);
+	void renderMainMenu(mainMenu& p_entity);
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
