@@ -59,7 +59,7 @@ int main(int argc, char* args[])
 	//audio
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	Mix_Music* backgroundMusic = NULL;
-	backgroundMusic = Mix_LoadMUS("audio/bg.wav");
+	backgroundMusic = Mix_LoadMUS("audio/bgmusic/mainmenu.wav");
 	Mix_PlayMusic(backgroundMusic, -1);
 	Mix_VolumeMusic(MIX_MAX_VOLUME / 10);
 
@@ -132,6 +132,12 @@ int main(int argc, char* args[])
 		}
 		else mainmenu.changeToNormal();
 		
+		if (!Mix_PlayingMusic())
+		{
+			backgroundMusic = Mix_LoadMUS(randomMusic().c_str());
+			Mix_PlayMusic(backgroundMusic, 0);
+		}
+
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT)
@@ -148,6 +154,9 @@ int main(int argc, char* args[])
 					{
 						showMainMenu = false;
 						paused = false;
+						Mix_HaltMusic();
+						backgroundMusic = Mix_LoadMUS(randomMusic().c_str());
+						Mix_PlayMusic(backgroundMusic, 0);
 					}
 				}
 				
@@ -277,4 +286,9 @@ void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score)
 		p_sawblade[i].deactivate();
 	}
 	p_score = 0;
+}
+
+string randomMusic()
+{
+	return "audio/bgmusic/" + to_string(rand() % 6 + 1) + ".wav";
 }
