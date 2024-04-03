@@ -5,7 +5,7 @@
 class mainMenu
 {
 public:
-	mainMenu(float p_x, float p_y, SDL_Texture* p_tex, SDL_Texture* p_play, SDL_Texture* p_option);
+	mainMenu(float p_x, float p_y, SDL_Texture* p_tex, SDL_Texture* p_play, SDL_Texture* p_option, SDL_Texture* p_quit);
 
 	//Lay gia tri x va y
 	float getX();
@@ -14,6 +14,7 @@ public:
 	SDL_Rect getCurrentFrame();
 	void changeToPlay();
 	void changeToOption();
+	void changeToQuit();
 	void changeToNormal();
 private:
 	float x, y;
@@ -21,5 +22,6 @@ private:
 	SDL_Texture* tex;
 	SDL_Texture* playTex;
 	SDL_Texture* optionTex;
+	SDL_Texture* quitTex;
 	SDL_Texture* normalTex;
 };

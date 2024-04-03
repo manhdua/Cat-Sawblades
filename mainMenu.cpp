@@ -2,8 +2,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-mainMenu::mainMenu(float p_x, float p_y, SDL_Texture* p_tex, SDL_Texture* p_play, SDL_Texture* p_option)
-	:x(p_x), y(p_y), tex(p_tex), playTex(p_play), optionTex(p_option), normalTex(p_tex)
+mainMenu::mainMenu(float p_x, float p_y, SDL_Texture* p_tex, SDL_Texture* p_play, SDL_Texture* p_option, SDL_Texture* p_quit)
+	:x(p_x), y(p_y), tex(p_tex), playTex(p_play), optionTex(p_option), normalTex(p_tex), quitTex(p_quit)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;
@@ -44,4 +44,9 @@ void mainMenu::changeToOption()
 void mainMenu::changeToNormal()
 {
 	tex = normalTex;
+}
+
+void mainMenu::changeToQuit()
+{
+	tex = quitTex;
 }

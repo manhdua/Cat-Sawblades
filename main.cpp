@@ -89,7 +89,8 @@ int main(int argc, char* args[])
 	SDL_Texture* mainmenuTexture = window.loadTexture("image/mainmenu.png");
 	SDL_Texture* playTexture = window.loadTexture("image/play.png");
 	SDL_Texture* optionTexture = window.loadTexture("image/option.png");
-	mainMenu mainmenu(0, 0, mainmenuTexture, playTexture, optionTexture);
+	SDL_Texture* quitMainTexture = window.loadTexture("image/quitmain.png");
+	mainMenu mainmenu(0, 0, mainmenuTexture, playTexture, optionTexture, quitMainTexture);
 
 	vector<Sawblade> sawblades;
 
@@ -121,7 +122,7 @@ int main(int argc, char* args[])
 			deathmenu.changeToQuit();
 		}
 		else deathmenu.changeToNormal();
-
+		//
 		if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
 		{
 			mainmenu.changeToPlay();
@@ -129,6 +130,10 @@ int main(int argc, char* args[])
 		else if (mouseX >= 432 && mouseX <= 848 && mouseY >= 366 && mouseY <= 436)
 		{
 			mainmenu.changeToOption();
+		}
+		else if (mouseX >= 432 && mouseX <= 848 && mouseY >= 495 && mouseY <= 566)
+		{
+			mainmenu.changeToQuit();
 		}
 		else mainmenu.changeToNormal();
 		
@@ -157,6 +162,11 @@ int main(int argc, char* args[])
 						Mix_HaltMusic();
 						backgroundMusic = Mix_LoadMUS(randomMusic().c_str());
 						Mix_PlayMusic(backgroundMusic, 0);
+					}
+
+					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 495 && mouseY <= 566)
+					{
+						gameRunning = false;
 					}
 				}
 				
