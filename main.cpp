@@ -26,6 +26,10 @@ const int TICKS_PER_FRAME = 1000 / FPS;
 bool paused = true;
 bool showDeathMenu = false;
 bool showMainMenu = true;
+bool showOptionMenu = false;
+
+int BGMVolume = 0;
+int SFXVolume = 100;
 
 bool checkCollision(float Ax, float Ay, float Bx, float By);
 void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score);
@@ -83,8 +87,8 @@ int main(int argc, char* args[])
 	SDL_Texture* deathmenuTexture = window.loadTexture("image/deathmenu.png");
 	SDL_Texture* tryAgainTexture = window.loadTexture("image/tryAgain.png");
 	SDL_Texture* quitTexture = window.loadTexture("image/quit.png");
-	Deathmenu deathmenu(290, 200, deathmenuTexture, tryAgainTexture, quitTexture);
-
+	SDL_Texture* optionMenuTexture = window.loadTexture("image/optionMenu.png");
+	Deathmenu deathmenu(290, 200, deathmenuTexture, tryAgainTexture, quitTexture, optionMenuTexture);
 	//mainMenu
 	SDL_Texture* mainmenuTexture = window.loadTexture("image/mainmenu.png");
 	SDL_Texture* playTexture = window.loadTexture("image/play.png");
@@ -153,7 +157,9 @@ int main(int argc, char* args[])
 
 			if (event.type == SDL_MOUSEBUTTONDOWN)
 			{
-				if (showMainMenu)
+				cout << mouseX << " " << mouseY << '\n';
+				
+				if (showMainMenu && !showOptionMenu)
 				{
 					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
 					{
@@ -167,6 +173,11 @@ int main(int argc, char* args[])
 					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 495 && mouseY <= 566)
 					{
 						gameRunning = false;
+					}
+
+					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 366 && mouseY <= 436)
+					{
+						showOptionMenu = true;
 					}
 				}
 				
@@ -182,6 +193,19 @@ int main(int argc, char* args[])
 					if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
 					{
 						gameRunning = false;
+					}
+				}
+
+				if (showOptionMenu)
+				{
+					if (mouseX >= 932 && mouseX <= 966 && mouseY >= 220 && mouseY <= 254)
+					{
+						showOptionMenu = false;
+					}
+
+					if (mouseX >= 539 && mouseX <= 573 && mouseY >= 295 && mouseY <= 334 && BGMVolume != 100)
+					{
+						BGMVolume += 10;
 					}
 				}
 			}
@@ -267,6 +291,13 @@ int main(int argc, char* args[])
 			window.renderMainMenu(mainmenu);
 		}
 		
+		if (showOptionMenu)
+		{
+			deathmenu.changeToOption();
+			window.renderDeathmenu(deathmenu);
+			window.renderText(scoreFont, { 255, 255, 255 }, to_string(BGMVolume), 470, 295);
+			window.renderText(scoreFont, { 255, 255, 255 }, to_string(SFXVolume), 470, 345);
+		}
 		window.display();
 	}
 	

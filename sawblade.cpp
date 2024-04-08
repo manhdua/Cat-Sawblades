@@ -11,7 +11,6 @@ Sawblade::Sawblade(float p_x, float p_y, SDL_Texture* p_red, SDL_Texture* p_gree
 	currentFrame.y = 0;
 	currentFrame.w = 32;
 	currentFrame.h = 32;
-	
 	float magnitude = sqrt(p_dx * p_dx + p_dy * p_dy);
 	velX = p_dx / magnitude * p_bulletSpeed;
 	velY = p_dy / magnitude * p_bulletSpeed;
@@ -44,8 +43,6 @@ void Sawblade::move()
 	if (x <= 398) velX = -velX;
 	if (x >= 820) velX = -velX;
 	if (y >= 611) velY = -velY;
-
-	
 }
 
 bool Sawblade::isActive()
