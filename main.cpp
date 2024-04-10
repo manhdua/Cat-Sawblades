@@ -28,8 +28,8 @@ bool showDeathMenu = false;
 bool showMainMenu = true;
 bool showOptionMenu = false;
 
-int BGMVolume = 0;
-int SFXVolume = 100;
+int BGMVolume = 50;
+int SFXVolume = 50;
 
 bool checkCollision(float Ax, float Ay, float Bx, float By);
 void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score);
@@ -65,7 +65,7 @@ int main(int argc, char* args[])
 	Mix_Music* backgroundMusic = NULL;
 	backgroundMusic = Mix_LoadMUS("audio/bgmusic/mainmenu.wav");
 	Mix_PlayMusic(backgroundMusic, -1);
-	Mix_VolumeMusic(MIX_MAX_VOLUME / 10);
+	Mix_VolumeMusic(BGMVolume);
 
 	Mix_Chunk* jump = NULL;
 	jump = Mix_LoadWAV("audio/jump.wav");
@@ -73,6 +73,8 @@ int main(int argc, char* args[])
 	Mix_Chunk* click = NULL;
 	click = Mix_LoadWAV("audio/click.wav");
 
+	Mix_VolumeChunk(jump, SFXVolume);
+	Mix_VolumeChunk(click , SFXVolume);
 	//tao texture
 	SDL_Texture* catTexture = window.loadTexture("image/cat.png");
 	Cat Cat(630, 611, catTexture, 5, jump);
@@ -113,6 +115,10 @@ int main(int argc, char* args[])
 	while (gameRunning)
 	{
 		capTimer.start();
+
+		Mix_VolumeMusic(BGMVolume);
+		Mix_VolumeChunk(jump, SFXVolume);
+		Mix_VolumeChunk(click, SFXVolume);
 
 		int mouseX, mouseY;
 		SDL_GetMouseState(&mouseX, &mouseY);
@@ -155,10 +161,24 @@ int main(int argc, char* args[])
 			}
 			Cat.handleEvent(event);
 
+			if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
+			{
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_ESCAPE:
+						if (!showOptionMenu)
+						{
+							showOptionMenu = true;
+						}
+						else
+						{
+							showOptionMenu = false;
+						}
+				}
+			}
+
 			if (event.type == SDL_MOUSEBUTTONDOWN)
 			{
-				cout << mouseX << " " << mouseY << '\n';
-				
 				if (showMainMenu && !showOptionMenu)
 				{
 					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
@@ -206,6 +226,21 @@ int main(int argc, char* args[])
 					if (mouseX >= 539 && mouseX <= 573 && mouseY >= 295 && mouseY <= 334 && BGMVolume != 100)
 					{
 						BGMVolume += 10;
+					}
+
+					if ((mouseX >= 587 && mouseX <= 621 && mouseY >= 295 && mouseY <= 334 && BGMVolume != 0))
+					{
+						BGMVolume -= 10;
+					}
+
+					if ((mouseX >= 539 && mouseX <= 574 && mouseY >= 341 && mouseY <= 382 && SFXVolume != 100))
+					{
+						SFXVolume += 10;
+					}
+
+					if ((mouseX >= 589 && mouseX <= 619 && mouseY >= 341 && mouseY <= 382 && SFXVolume != 0))
+					{
+						SFXVolume -= 10;
 					}
 				}
 			}
@@ -295,8 +330,8 @@ int main(int argc, char* args[])
 		{
 			deathmenu.changeToOption();
 			window.renderDeathmenu(deathmenu);
-			window.renderText(scoreFont, { 255, 255, 255 }, to_string(BGMVolume), 470, 295);
-			window.renderText(scoreFont, { 255, 255, 255 }, to_string(SFXVolume), 470, 345);
+			window.renderText(scoreFont, { 255, 255, 255 }, to_string(BGMVolume) + "%", 470, 295);
+			window.renderText(scoreFont, { 255, 255, 255 }, to_string(SFXVolume) + "%", 470, 345);
 		}
 		window.display();
 	}
