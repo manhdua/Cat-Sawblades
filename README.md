@@ -18,12 +18,22 @@ Cat & Sawblades là một tựa game Arcarde hành động. Trong game, bạn s�
 Tải game (được nén thành file .rar) [tại đây](https://drive.google.com/file/d/1Al9ILO8jCIFRANtA5SWQUSE3YVGAesUg/view?usp=sharing). Sau đó giải nén game vào một thư mục và bật Cat & Sawblades.exe để chơi.
 ### b, Cách 2: Bao gồm code và có thể biên dịch.
 - Bước 1: Bấm vào phần "Code" màu xanh lá ở trên rồi bấm "Download ZIP" để tải
+<img src="preview/1.png" width="300"/>
+
 - Bước 2: Giải nén ra một thư mục
 - Bước 3: Mở file "Cat & Sawblades.sln" bằng Visual Studio
 - Bước 4: Chuột phải vào "Cat & Sawblades" ở góc trái trên màn hình mà ấn vào properties.
+<img src="preview/8.png" width="200"/>
+
 - Bước 5: Tại phần "VC++ Directories". Chỉnh đường dẫn "Include Directories" thành đường dẫn vào thư mục "...\SDL2\include" trong file game và đường dẫn "Library Directories" thành đường dẫn vào thư mục "...\SDL2\lib"
+<img src="preview/2.png" width="500"/>
+  
 - Bước 6: Tại phần "C/C++", phần "General", chỉnh đường dẫn ""Additional Include Directories" thành đường dẫn vào thư mục "...\SDL2\include"
+<img src="preview/3.png" width="500"/>
+
 - Bước 7: Tại phần "Linker", phần "General", chỉnh đường dẫn "Additional Library Directories" thành đường dẫn vào thư mục "...\SDL2\lib\x64"
+<img src="preview/4.png" width="500"/>
+
 - Bước 8: Ấn Apply và OK. Ấn nút "Local Windows Debugger" hoặc F5 để chạy game 
 ## Chi tiết về game
 ### Gameplay
@@ -35,6 +45,9 @@ Demo game tại đây
 ### Nội dung game
 Người chơi phải di chuyển và nhảy để né, tránh các lưỡi cưa. Nếu người chơi nhảy qua lưỡi cưa và chạm đất, lưỡi của sẽ biến mất và người chơi được cộng điểm. Nếu người chơi chạm vào lưỡi cưa, lượt chơi sẽ kết thúc
 ### Một số hình ảnh trong game
+<img src="preview/5.png" width="400"/>
+<img src="preview/6.png" width="400"/>
+<img src="preview/7.png" width="400"/>
 
 ## Các kỹ thuật lập trình đã sử dụng
 - Vòng lặp
