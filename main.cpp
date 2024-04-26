@@ -17,65 +17,61 @@ using namespace std;
 #include "LTimer.hpp"
 #include "Deathmenu.hpp"
 #include "mainMenu.hpp"
+#include "globals.hpp" //global variables
 
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
-const int FPS = 60;
-const int TICKS_PER_FRAME = 1000 / FPS;
-
-bool paused = true;
-bool showDeathMenu = false;
-bool showMainMenu = true;
-bool showOptionMenu = false;
-
-int BGMVolume = 50;
-int SFXVolume = 50;
+vector<Sawblade> sawblades;
+int mouseX, mouseY;
+RenderWindow window("Cat & Sawblades", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 bool checkCollision(float Ax, float Ay, float Bx, float By);
-void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score);
+void restartGame(Cat& p_cat);
 string randomMusic();
+void UpdateAudio(Mix_Chunk* p_jump, Mix_Chunk* p_click, Mix_Music* p_bgm);
+void UpdateTexture(Deathmenu &p_deathmenu, mainMenu &p_mainmenu);
+void OpenMenu();
+void HandleMainMenuInput(Mix_Music* p_bgm);
+void HandleDeathMenuInput(Cat p_Cat);
+void HandleOptionMenuInput();
+void FreeMemory(Mix_Music* p_bgm, Mix_Chunk* p_jump, Mix_Chunk* p_click);
+void SpawnSawblade(SDL_Texture* redSawbladeTexture, SDL_Texture* greenSawbladeTexture);
+void IncreaseSpawnNumber();
 
 int main(int argc, char* args[])
 {
 	srand(time(0));
 	
+	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		cout << "SDL_Init failed\nError: " << SDL_GetError() << '\n';
-
 	if (!IMG_Init(IMG_INIT_PNG))
 		cout << "IMG_Init failed\nError: " << IMG_GetError() << '\n';
-	
+
+	// Khởi tạo font
 	TTF_Init();
-	TTF_Font* font = NULL;
 	TTF_Font* smallerFont = NULL;
 	TTF_Font* scoreFont = NULL;
-	font = TTF_OpenFont("dogicapixel.ttf", 32);
 	smallerFont = TTF_OpenFont("dogicapixel.ttf", 16);
 	scoreFont = TTF_OpenFont("Have Idea.ttf", 32);
 
-	// title , resolution
-	RenderWindow window("Cat & Sawblades", SCREEN_WIDTH, SCREEN_HEIGHT);
+	// Render window
 
-	bool gameRunning = true;
-
-	SDL_Event event;
-
-	//audio
+	//Khởi tạo audio và file âm thanh
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+	
 	Mix_Music* backgroundMusic = NULL;
 	backgroundMusic = Mix_LoadMUS("audio/bgmusic/mainmenu.wav");
 	Mix_PlayMusic(backgroundMusic, -1);
 	Mix_VolumeMusic(BGMVolume);
-
+	
 	Mix_Chunk* jump = NULL;
 	jump = Mix_LoadWAV("audio/jump.wav");
-
 	Mix_Chunk* click = NULL;
 	click = Mix_LoadWAV("audio/click.wav");
-
+	
 	Mix_VolumeChunk(jump, SFXVolume);
 	Mix_VolumeChunk(click , SFXVolume);
-	//tao texture
+
+	//Khởi tạo các texture
 	SDL_Texture* catTexture = window.loadTexture("image/cat.png");
 	Cat Cat(630, 611, catTexture, 5, jump);
 
@@ -85,170 +81,52 @@ int main(int argc, char* args[])
 	SDL_Texture* backgroundTexture = window.loadTexture("image/bg.png");
 	Entity background(0, 0, backgroundTexture);
 
-	//deathMenu
 	SDL_Texture* deathmenuTexture = window.loadTexture("image/deathmenu.png");
 	SDL_Texture* tryAgainTexture = window.loadTexture("image/tryAgain.png");
 	SDL_Texture* quitTexture = window.loadTexture("image/quit.png");
 	SDL_Texture* optionMenuTexture = window.loadTexture("image/optionMenu.png");
 	Deathmenu deathmenu(290, 200, deathmenuTexture, tryAgainTexture, quitTexture, optionMenuTexture);
-	//mainMenu
+
 	SDL_Texture* mainmenuTexture = window.loadTexture("image/mainmenu.png");
 	SDL_Texture* playTexture = window.loadTexture("image/play.png");
 	SDL_Texture* optionTexture = window.loadTexture("image/option.png");
 	SDL_Texture* quitMainTexture = window.loadTexture("image/quitmain.png");
 	mainMenu mainmenu(0, 0, mainmenuTexture, playTexture, optionTexture, quitMainTexture);
 
-	vector<Sawblade> sawblades;
-
+	//Setup Cap FPS
 	LTimer fpsTimer;
 	LTimer capTimer;
-
-	int frameTime = 0;
-	int delay = 0;
-	int playerScore = 0;
-	int maxScore = 0;
-	int countedFrame = 0;
-	int SpawnSpeed = 100;
-
 	fpsTimer.start();
 
 	while (gameRunning)
 	{
 		capTimer.start();
 
-		Mix_VolumeMusic(BGMVolume);
-		Mix_VolumeChunk(jump, SFXVolume);
-		Mix_VolumeChunk(click, SFXVolume);
+		UpdateAudio(jump, click, backgroundMusic);
+		UpdateTexture(deathmenu, mainmenu);
 
-		int mouseX, mouseY;
+		//Xử lí input người chơi
 		SDL_GetMouseState(&mouseX, &mouseY);
-		
-		if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
-		{
-			deathmenu.changeToTryAgain();
-		}
-		else if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
-		{
-			deathmenu.changeToQuit();
-		}
-		else deathmenu.changeToNormal();
-		//
-		if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
-		{
-			mainmenu.changeToPlay();
-		}
-		else if (mouseX >= 432 && mouseX <= 848 && mouseY >= 366 && mouseY <= 436)
-		{
-			mainmenu.changeToOption();
-		}
-		else if (mouseX >= 432 && mouseX <= 848 && mouseY >= 495 && mouseY <= 566)
-		{
-			mainmenu.changeToQuit();
-		}
-		else mainmenu.changeToNormal();
-		
-		if (!Mix_PlayingMusic())
-		{
-			backgroundMusic = Mix_LoadMUS(randomMusic().c_str());
-			Mix_PlayMusic(backgroundMusic, 0);
-		}
+		SDL_Event event;
 
 		while (SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_QUIT)
-			{
-				gameRunning = false;
-			}
 			Cat.handleEvent(event);
+			
+			if (event.type == SDL_QUIT) gameRunning = false;
 
 			if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
 			{
-				switch (event.key.keysym.sym)
-				{
-					case SDLK_ESCAPE:
-						if (!showOptionMenu)
-						{
-							showOptionMenu = true;
-						}
-						else
-						{
-							showOptionMenu = false;
-						}
-				}
+				if (event.key.keysym.sym == SDLK_ESCAPE) OpenMenu();
 			}
 
 			if (event.type == SDL_MOUSEBUTTONDOWN)
 			{
-				if (showMainMenu && !showOptionMenu)
-				{
-					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
-					{
-						showMainMenu = false;
-						paused = false;
-						Mix_HaltMusic();
-						backgroundMusic = Mix_LoadMUS(randomMusic().c_str());
-						Mix_PlayMusic(backgroundMusic, 0);
-					}
-
-					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 495 && mouseY <= 566)
-					{
-						gameRunning = false;
-					}
-
-					if (mouseX >= 432 && mouseX <= 848 && mouseY >= 366 && mouseY <= 436)
-					{
-						showOptionMenu = true;
-					}
-				}
-				
-				if (showDeathMenu)
-				{
-					if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
-					{
-						paused = false;
-						showDeathMenu = false;
-						restartGame(Cat, sawblades, playerScore);
-					}
-
-					if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
-					{
-						gameRunning = false;
-					}
-				}
-
-				if (showOptionMenu)
-				{
-					if (mouseX >= 932 && mouseX <= 966 && mouseY >= 220 && mouseY <= 254)
-					{
-						showOptionMenu = false;
-					}
-
-					if (mouseX >= 539 && mouseX <= 573 && mouseY >= 295 && mouseY <= 334 && BGMVolume != 100)
-					{
-						BGMVolume += 10;
-					}
-
-					if ((mouseX >= 587 && mouseX <= 621 && mouseY >= 295 && mouseY <= 334 && BGMVolume != 0))
-					{
-						BGMVolume -= 10;
-					}
-
-					if ((mouseX >= 539 && mouseX <= 574 && mouseY >= 341 && mouseY <= 382 && SFXVolume != 100))
-					{
-						SFXVolume += 10;
-					}
-
-					if ((mouseX >= 589 && mouseX <= 619 && mouseY >= 341 && mouseY <= 382 && SFXVolume != 0))
-					{
-						SFXVolume -= 10;
-					}
-				}
+				if (showMainMenu && !showOptionMenu) HandleMainMenuInput(backgroundMusic);
+				if (showDeathMenu) HandleDeathMenuInput(Cat);
+				if (showOptionMenu) HandleOptionMenuInput();
 			}
 		}
-		
-		int avgFPS = countedFrame / (fpsTimer.getTicks() / 1000.f);
-		if (avgFPS > 2000000)
-			avgFPS = 0;
 		
 		Cat.collideWithWall();
 		Cat.jump();
@@ -263,34 +141,33 @@ int main(int argc, char* args[])
 			if (Cat.getCurrentVel() != 0) Cat.moveLeftAnimation(frameTime);
 		}
 
+		int avgFPS = countedFrame / (fpsTimer.getTicks() / 1000.f);
+		if (avgFPS > 2000000)
+			avgFPS = 0;
+
 		countedFrame++;
 		int frameTicks = capTimer.getTicks();
 		if (frameTicks < TICKS_PER_FRAME)
 			SDL_Delay(TICKS_PER_FRAME - frameTicks);
 		
 		if (playerScore > maxScore) maxScore = playerScore;
+		IncreaseSpawnNumber();
 
 		if (!paused)
-		{
-			//spawn sawblade
-			delay++;
-			if (delay == SpawnSpeed)
-			{
-				delay = 0;
-				sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, greenSawbladeTexture, 5, rand() % 201 - 100, rand() % 100 + 1));
-			}
-			
+		{	
+			//Render
 			window.clear();
 			window.renderEntity(background);
-			window.renderCat(Cat); //render texture
+			window.renderCat(Cat);
 			window.renderText(smallerFont, { 0, 0, 0 }, "Score: " + to_string(playerScore), 420, 60);
 			window.renderText(smallerFont, { 255, 255, 255 }, "FPS: " + to_string(avgFPS), 10, 10);
 
+			SpawnSawblade(redSawbladeTexture, greenSawbladeTexture);
 			for (auto& sawblade : sawblades)
 			{
 				if (sawblade.isActive())
 				{
-					if (Cat.getY() < sawblade.getY() && abs(Cat.getX() - sawblade.getX()) < 5)
+					if (Cat.getY() < sawblade.getY() && abs(Cat.getX() - sawblade.getX()) < 7)
 					{
 						sawblade.changeToGreen();
 					}
@@ -335,15 +212,7 @@ int main(int argc, char* args[])
 		}
 		window.display();
 	}
-	
-	Mix_FreeChunk(jump);
-	Mix_FreeMusic(backgroundMusic);
-	Mix_CloseAudio();
-	window.cleanUp();
-	SDL_Quit();
-	IMG_Quit();
-	Mix_Quit();
-
+	FreeMemory(backgroundMusic, jump, click);
 	return 0;
 }
 
@@ -354,17 +223,169 @@ bool checkCollision(float Ax, float Ay, float Bx, float By)
 	return true;
 }
 
-void restartGame(Cat& p_cat, vector<Sawblade>& p_sawblade, int& p_score)
+void restartGame(Cat& p_cat)
 {
 	p_cat.restartPos();
-	for (int i = 0; i < p_sawblade.size(); i++)
+	for (int i = 0; i < sawblades.size(); i++)
 	{
-		p_sawblade[i].deactivate();
+		sawblades[i].deactivate();
 	}
-	p_score = 0;
+	playerScore = 0;
+	SpawnNumber = 1;
 }
 
 string randomMusic()
 {
 	return "audio/bgmusic/" + to_string(rand() % 6 + 1) + ".wav";
+}
+
+void UpdateAudio(Mix_Chunk* p_jump, Mix_Chunk* p_click, Mix_Music* p_bgm)
+{
+	Mix_VolumeMusic(BGMVolume);
+	Mix_VolumeChunk(p_jump, SFXVolume);
+	Mix_VolumeChunk(p_click, SFXVolume);
+
+	if (!Mix_PlayingMusic())
+	{
+		p_bgm = Mix_LoadMUS(randomMusic().c_str());
+		Mix_PlayMusic(p_bgm, 0);
+	}
+}
+
+void UpdateTexture(Deathmenu &p_deathmenu, mainMenu &p_mainmenu)
+{
+	if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
+	{
+		p_deathmenu.changeToTryAgain();
+	}
+	else if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
+	{
+		p_deathmenu.changeToQuit();
+	}
+	else p_deathmenu.changeToNormal();
+	
+	if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
+	{
+		p_mainmenu.changeToPlay();
+	}
+	else if (mouseX >= 432 && mouseX <= 848 && mouseY >= 366 && mouseY <= 436)
+	{
+		p_mainmenu.changeToOption();
+	}
+	else if (mouseX >= 432 && mouseX <= 848 && mouseY >= 495 && mouseY <= 566)
+	{
+		p_mainmenu.changeToQuit();
+	}
+	else p_mainmenu.changeToNormal();
+}
+
+void OpenMenu()
+{
+	if (!showOptionMenu)
+	{
+		showOptionMenu = true;
+	}
+	else
+	{
+		showOptionMenu = false;
+	}
+}
+
+void HandleMainMenuInput(Mix_Music* p_bgm)
+{
+	if (mouseX >= 432 && mouseX <= 848 && mouseY >= 233 && mouseY <= 304)
+	{
+		showMainMenu = false;
+		paused = false;
+		Mix_HaltMusic();
+		p_bgm = Mix_LoadMUS(randomMusic().c_str());
+		Mix_PlayMusic(p_bgm, 0);
+	}
+
+	if (mouseX >= 432 && mouseX <= 848 && mouseY >= 495 && mouseY <= 566)
+	{
+		gameRunning = false;
+	}
+
+	if (mouseX >= 432 && mouseX <= 848 && mouseY >= 366 && mouseY <= 436)
+	{
+		showOptionMenu = true;
+	}
+}
+
+void HandleDeathMenuInput(Cat p_Cat)
+{
+	if (mouseX >= 402 && mouseX <= 592 && mouseY >= 430 && mouseY <= 496)
+	{
+		paused = false;
+		showDeathMenu = false;
+		restartGame(p_Cat);
+	}
+
+	if (mouseX >= 735 && mouseX <= 848 && mouseY >= 433 && mouseY <= 489)
+	{
+		gameRunning = false;
+	}
+}
+
+void HandleOptionMenuInput()
+{
+	if (mouseX >= 932 && mouseX <= 966 && mouseY >= 220 && mouseY <= 254)
+	{
+		showOptionMenu = false;
+	}
+
+	if (mouseX >= 539 && mouseX <= 573 && mouseY >= 295 && mouseY <= 334 && BGMVolume != 100)
+	{
+		BGMVolume += 10;
+	}
+
+	if ((mouseX >= 587 && mouseX <= 621 && mouseY >= 295 && mouseY <= 334 && BGMVolume != 0))
+	{
+		BGMVolume -= 10;
+	}
+
+	if ((mouseX >= 539 && mouseX <= 574 && mouseY >= 341 && mouseY <= 382 && SFXVolume != 100))
+	{
+		SFXVolume += 10;
+	}
+
+	if ((mouseX >= 589 && mouseX <= 619 && mouseY >= 341 && mouseY <= 382 && SFXVolume != 0))
+	{
+		SFXVolume -= 10;
+	}
+}
+
+void FreeMemory(Mix_Music* p_bgm, Mix_Chunk* p_jump, Mix_Chunk* p_click)
+{
+	Mix_FreeChunk(p_jump);
+	Mix_FreeChunk(p_click);
+	Mix_FreeMusic(p_bgm);
+	Mix_CloseAudio();
+	window.cleanUp();
+	SDL_Quit();
+	IMG_Quit();
+	Mix_Quit();
+}
+
+void SpawnSawblade(SDL_Texture* redSawbladeTexture, SDL_Texture* greenSawbladeTexture)
+{
+	delay++;
+	if (delay == SpawnSpeed)
+	{
+		delay = 0;
+		for (int i = 0; i < SpawnNumber; i++)
+		{
+			sawblades.push_back(Sawblade(rand() % 200 + 500, 30, redSawbladeTexture, greenSawbladeTexture, 5, rand() % 201 - 100, rand() % 20 + 80));
+		}
+	}
+}
+
+void IncreaseSpawnNumber()
+{
+	if (playerScore == 20) SpawnNumber = 2;
+	if (playerScore == 40) SpawnNumber = 3;
+	if (playerScore == 60) SpawnNumber = 4;
+	if (playerScore == 80) SpawnNumber = 5;
+	if (playerScore == 100) SpawnNumber = 6;
 }
