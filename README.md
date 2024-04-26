@@ -37,7 +37,7 @@ Tải game (được nén thành file .rar) [tại đây](https://drive.google.c
 - Bước 8: Ấn Apply và OK. Ấn nút "Local Windows Debugger" hoặc F5 để chạy game 
 ## Chi tiết về game
 ### Gameplay
-Demo game tại đây
+Demo game và hướng dẫn cài đặt [tại đây](https://drive.google.com/file/d/1ZOrYzaA0RXTkrAFHaFW99cJ1TMuW3G9P/view?usp=sharing)
 ### Control
 
 - Di chuyển nhân vật bằng phím mũi tên
@@ -74,3 +74,10 @@ Người chơi phải di chuyển và nhảy để né, tránh các lưỡi cưa
 - sawblade.cpp và Sawblade.hpp: Quản lý lưỡi cưa như tốc độ, độ lớn, ...
 - renderwindow.cpp và RenderWindow.hpp: Dùng để load hoặc render các texture lên màn hình chơi
 - main.cpp: Hàm main của game
+
+### Kết luận
+- Hiểu được cách thức hoạt động và tự viết một game
+- Biết cách quản lý code trong những chương trình lớn, phát hiện và sửa các lỗi ẩn
+- Sử dụng tốt ngôn ngữ C++ và thư viện đồ họa SDL2
+- Hiểu cơ bản về lập trình hướng đối đượng
+
